@@ -14,12 +14,10 @@ let gameActive = true;
 
 const gameBoard = document.getElementById('gameBoard');
 const scoreSpan = document.getElementById('score');
-const leaderboardList = document.getElementById('leaderboard');
-const overlay = document.getElementById('overlay');
 const timerSpan = document.getElementById('timer');
 const banner = document.getElementById('banner');
-const modeLabelLeaderboard = document.getElementById('mode-label-leaderboard');
 const boardModeSelect = document.getElementById('boardMode');
+const overlay = document.getElementById('overlay');
 
 let timer = 0;
 let timerInterval = null;
@@ -48,23 +46,9 @@ function addScoreToLeaderboard(score, name, duration) {
       if (a.score !== b.score) return b.score - a.score;
       return a.duration - b.duration;
     })
-    .slice(0, 10); // Top 10 per modalità
+    .slice(0, 10);
   saveLeaderboard(leaderboard);
-  renderLeaderboard();
-}
-
-function renderLeaderboard() {
-  if (!leaderboardList) return;
-  leaderboardList.innerHTML = '';
-  // Label modalità sopra la lista
-  if (modeLabelLeaderboard) {
-    modeLabelLeaderboard.textContent = "CLASSIFICA " + BOARD_MODES[boardMode].label;
-  }
-  const leaderboard = getLeaderboard();
-  leaderboard.forEach(entry => {
-    const tempo = entry.duration !== undefined ? ` – ${entry.duration}s` : '';
-    leaderboardList.innerHTML += `<li>${entry.name ?? 'Anonimo'}${tempo} – ${entry.score} – ${entry.time}</li>`;
-  });
+  // Non serve ri-renderizzare leaderboard (home non la mostra)
 }
 
 function updateScoreDisplay() {
@@ -159,8 +143,8 @@ function checkWin() {
   if (unrevealedCount === 0) {
     gameActive = false;
     stopTimer();
-    showOverlay(
-      `Complimenti, hai vinto!<br>Punteggio: <strong>${score}</strong><br>Tempo: <strong>${timer}</strong> secondi`
+    showOverlayWin(
+      `Complimenti!<br>Punteggio: <strong>${score}</strong> · Tempo: <strong>${timer}s</strong>`
     );
     showBanner && showBanner("🎉 Vittoria! Nuovo record?");
     return true;
@@ -227,11 +211,22 @@ function renderBoard() {
       div.className = 'cell';
       div.tabIndex = 0;
       div.onclick = () => { if (gameActive) revealCell(r, c); };
-      div.onauxclick = (e) => {
+      // Middle click, FORZA bandierina e blocca autoscroll
+      div.addEventListener('mousedown', function(e) {
         if (gameActive && e.button === 1) {
           e.preventDefault();
           toggleFlag(r, c);
         }
+      });
+      // Touch prolungato SU SMARTPHONE: bandierina
+      let touchTimer = null;
+      div.ontouchstart = function(e) {
+        touchTimer = setTimeout(function() {
+          if (gameActive) toggleFlag(r, c);
+        }, 600);
+      };
+      div.ontouchend = function(e) {
+        if (touchTimer) clearTimeout(touchTimer);
       };
       div.onkeydown = (e) => {
         if (!gameActive) return;
@@ -253,10 +248,8 @@ function restartGame() {
   renderBoard();
   updateScoreDisplay();
   hideOverlay();
-  renderLeaderboard();
 }
 
-// Modalità dinamica
 if (boardModeSelect) {
   boardModeSelect.value = boardMode;
   boardModeSelect.addEventListener('change', function () {
@@ -268,12 +261,11 @@ if (boardModeSelect) {
   });
 }
 
-// Leaderboard popup (pagina separata)
 function openLeaderboard() {
-  window.open('leaderboard.html', 'Leaderboard', 'width=650,height=750');
+  window.open('leaderboard.html', 'Leaderboard', 'width=700,height=900');
 }
 
-// Overlay Game Over (grafica avanzata, pulsanti distanziati)
+// Overlay Game Over grafica deluxe, NO duplicazione info
 function showOverlayGameOver() {
   if (!overlay) return;
   overlay.innerHTML = `
@@ -298,20 +290,22 @@ function showOverlayGameOver() {
   overlay.style.display = "flex";
 }
 
-
-// Overlay vittoria
-function showOverlay(msg) {
+// Overlay vittoria, stesso stile
+function showOverlayWin(msg) {
   if (!overlay) return;
-  overlay.innerHTML = `<div id="overlayContent" class="animated-overlay">
-    <div class="gameover-icon" style="font-size:2em;">🏅</div>
+  overlay.innerHTML = `
+  <div id="overlayContent" class="animated-overlay">
+    <div class="gameover-icon" style="font-size:2em;">🏆</div>
     <div class="gameover-title" style="background:linear-gradient(90deg,#35a7ff,#e3414b);color:#fff;">VITTORIA!</div>
-    <div class="gameover-msg">${msg}</div>
-    <div class="gameover-pills">
-      <span class="pill-score">🎯 <b>${score}</b> punti</span>
-      <span class="pill-time">⏱️ <b>${timer}</b>s</span>
+    <div class="stats-row">
+      <div class="stats-label">Punteggio</div>
+      <div class="stats-value">${score}</div>
+      <div class="stats-label">Tempo</div>
+      <div class="stats-value">${timer}s</div>
     </div>
-    <div style="margin:14px 0;">
-      <input id="playerName" type="text" placeholder="Il tuo nome..." style="font-size:1em; padding:6px 16px; border-radius:12px; border:1px solid #b9d8ef;">
+    <div style="margin:16px 0;">
+      <input id="playerName" type="text" placeholder="Il tuo nome..."
+        style="font-size:1em; padding:6px 16px; border-radius:12px; border:1px solid #b9d8ef;">
     </div>
     <div class="overlayButtonsRow">
       <button class="overlayButton" onclick="submitScore()">Salva e nuova partita</button>
@@ -354,14 +348,9 @@ function startTimer() {
 }
 
 function stopTimer() { clearInterval(timerInterval); }
-function resetTimer() {
-  timer = 0;
-  timerSpan.textContent = timer;
-  clearInterval(timerInterval);
-}
+function resetTimer() { timer = 0; timerSpan.textContent = timer; clearInterval(timerInterval); }
 
 // Inizializza il gioco
 createBoard();
 renderBoard();
-renderLeaderboard();
 stopTimer();

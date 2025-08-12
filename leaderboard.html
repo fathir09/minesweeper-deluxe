@@ -3,20 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Leaderboard Minesweeper Deluxe</title>
+  <meta name="description" content="Visualizza la classifica dei migliori giocatori di Minesweeper Deluxe per ogni livello. Sfida altri utenti direttamente dal browser.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 54 54'><circle cx='27' cy='27' r='24' fill='%2335a7ff' stroke='%2314375c' stroke-width='3'/><circle cx='27' cy='27' r='16' fill='%23fff'/><circle cx='27' cy='27' r='12' fill='%23e3414b'/><rect x='25' y='12' width='4' height='12' rx='2' fill='%23193972'/><rect x='25' y='30' width='4' height='12' rx='2' fill='%23193972'/><rect x='12' y='25' width='12' height='4' rx='2' fill='%23193972'/><rect x='30' y='25' width='12' height='4' rx='2' fill='%23193972'/><circle cx='27' cy='27' r='3' fill='%23fff' opacity='0.5'/></svg>">
   <style>
-    body {
-      font-family: 'Montserrat', Arial, sans-serif;
-      background: linear-gradient(120deg, #f6f7fb, #c5d8e8 100%);
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .header-container {
-      display: flex; flex-direction: column; align-items: center; margin-top: 30px; margin-bottom: 8px;
-    }
+    body { font-family: 'Montserrat', Arial, sans-serif; background: linear-gradient(120deg, #f6f7fb, #c5d8e8 100%); margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center;}
+    .header-container { display: flex; flex-direction: column; align-items: center; margin-top: 30px; margin-bottom: 8px;}
     .logo-title { display: flex; align-items: center; gap: 22px; margin-bottom: 10px;}
     .logo-svg { flex-shrink: 0; filter: drop-shadow(0 3px 12px #b9d8ef80);}
     .main-title { font-size: 2.2em; font-family: 'Montserrat', Arial, sans-serif; color: #14375c; font-weight: 800; letter-spacing: 2.5px; text-shadow: 0 2px 18px #b9d8ef70;}
@@ -31,11 +22,6 @@
     }
     .mode-select:focus { outline: 2px solid #35a7ff;}
     .mode-select:hover { background: linear-gradient(90deg, #cdeffa 70%, #77bff2 100%);}
-    #mode-leaderboard-label {
-      font-size: 1.13em;
-      color: #144c7a; font-weight: 600; margin: 14px 0 9px 0; letter-spacing:1px; text-shadow: 0 1px 10px #eaf6fb;
-      background:#eaf6fb; border-radius:18px; padding:4px 17px; display:inline-block;
-    }
     #leaderboard {
       background: #eaf6fb;
       padding: 22px 35px;
@@ -54,10 +40,7 @@
       margin-bottom: 10px;
       border-radius: 13px;
       box-shadow: 0 2px 10px #b9d8ef20;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-weight: 500;
+      display: flex; align-items: center; gap: 14px; font-weight: 500;
     }
     li:first-child {
       background: linear-gradient(90deg, #cdeffa 70%, #77bff2 100%);
@@ -68,13 +51,33 @@
       box-shadow: 0 4px 12px #51a1fa40;
     }
     li:last-child { margin-bottom: 0; }
+    .back-to-game-btn {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 9px 28px;
+      font-size: 1.02em;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(90deg, #77bff2 40%, #35a7ff 100%);
+      color: white;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      box-shadow: 1px 2px 8px #b9d8ef80;
+      cursor: pointer;
+      transition: background 0.16s, transform 0.18s;
+    }
+    .back-to-game-btn:hover { background: linear-gradient(90deg,#35a7ff 40%,#95d8ff 100%); transform: translateY(-2px) scale(1.06);}
+    .back-to-game-btn:focus { outline:2px solid #35a7ff; outline-offset:2px;}
+    @media (max-width: 900px) {
+      #leaderboard { min-width: 80vw; max-width: 98vw; padding: 10vw 4vw;}
+    }
     @media (max-width: 500px) {
-      #leaderboard { padding: 10px 5vw; min-width:unset; max-width:96vw; }
       .main-title { font-size: 1.12em; }
       .logo-title { gap: 12px; }
       .header-container { margin-top: 10px;}
-      #mode-leaderboard-label { font-size: 1em; padding: 4px 7vw;}
-      li { font-size: 1em; padding: 7px 7vw; }
+      li { font-size: 1.07em; padding: 7px 4vw;}
+      #leaderboard {min-width:96vw;max-width:99vw;padding:5vw;}
+      .back-to-game-btn { padding: 10px 4vw; font-size: 1.15em;}
     }
   </style>
 </head>
@@ -105,7 +108,7 @@
       </select>
     </div>
   </div>
-  
+  <button class="back-to-game-btn" onclick="window.close()">← Torna al Gioco</button>
   <ul id="leaderboard"></ul>
 
   <script>
