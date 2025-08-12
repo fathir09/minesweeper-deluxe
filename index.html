@@ -183,15 +183,94 @@
     .stats-label { color: #35a7ff; font-weight: 600; font-size: 1.07em; padding: 0 4px; letter-spacing: 1.2px;}
     .stats-value { background: linear-gradient(90deg, #eaf6fb 60%, #b6e3fc 100%); color: #193972; border-radius: 9px; font-weight: 700; font-size: 1.19em; padding: 2px 16px; letter-spacing: 2px; margin: 0 2px 0 0; box-shadow: 0 2px 8px #bee7ff0a; border: 1.5px solid #bee7ff70;}
     .overlayButtonsRow { display: flex; gap: 28px; justify-content: center; margin-top: 18px;}
-    @media (max-width: 500px) {
-      #overlayContent, .leaderboardOverlayBox, .rulesContent { padding: 18px 6vw; min-width: unset;}
-      .stats-row { gap: 11px; }
-      .overlayButtonsRow { flex-direction: column; gap: 14px; margin-top: 13px;}
-      .leaderboardOverlayBox { padding: 17px 3vw 14px 3vw; min-width:unset; max-width:99vw;}
-      .leaderboardOverlayBox h2 { font-size: 1.16em; }
-      .leaderboardOverlayBox li { font-size: 1em; padding: 5px 2vw; }
-      .lb-mode-label { font-size:1em; }
-    }
+.leaderboardOverlayBox {
+  background: linear-gradient(120deg, #e6f4ff 40%, #c3eaff 100%);
+  border-radius: 30px;
+  box-shadow: 0 12px 44px #19a7ff38, 0 2px 12px #b9d8ef26;
+  padding: 38px 36px 22px 36px;
+  min-width: 320px;
+  max-width: 94vw;
+  text-align: center;
+  font-size: 1.16em;
+  color: #14375c;
+  animation: bounceIn 0.38s cubic-bezier(.34,1.56,.64,1);
+}
+
+.leaderboardOverlayBox h2 {
+  font-size: 1.65em;
+  color: #2497e9;
+  font-weight: 900;
+  margin-bottom: 17px;
+  margin-top: 0;
+  letter-spacing: 2px;
+  text-shadow: 0 1px 14px #b8eaff40;
+}
+
+.leaderboardOverlayBox ul {
+  margin: 0 0 22px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.leaderboardOverlayBox li {
+  background: linear-gradient(90deg, #f3fdff 70%, #bae6ff 100%);
+  color: #20395c;
+  padding: 10px 22px;
+  margin-bottom: 12px;
+  border-radius: 17px;
+  box-shadow: 0 2px 14px #a6dafe20;
+  font-size: 1.12em;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-weight: 500;
+  justify-content: center;
+  transition: box-shadow 0.18s;
+  border: 0.5px solid #bee7ff55;
+}
+
+.leaderboardOverlayBox li:first-child {
+  background: linear-gradient(90deg,#9bd9fa 58%,#cdeffa 100%);
+  color: #195599;
+  font-size: 1.22em;
+  font-weight: 700;
+  border: 1.5px solid #35a7ff44;
+  box-shadow: 0 4px 18px #51a1fa40, 0 1px 8px #9ee6ff30;
+}
+
+.lb-mode-label {
+  font-size: 1.15em;
+  color: #197bdd;
+  font-weight: 700;
+  margin-bottom: 15px;
+  letter-spacing: 1.6px;
+  background: linear-gradient(90deg, #eaf6fb 70%, #bce7ff 100%);
+  border-radius: 16px;
+  padding: 6px 18px;
+  display: inline-block;
+  box-shadow: 0 1.5px 9px #cff2ff33;
+  text-shadow: 0 1px 8px #cff2ff66;
+}
+
+.stats-value {
+  background: linear-gradient(90deg, #eaf6fb 60%, #b6e3fc 100%);
+  color: #193972;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 1.08em;
+  padding: 2px 16px;
+  letter-spacing: 2px;
+  margin: 0 2px 0 0;
+  box-shadow: 0 2px 8px #bee7ff10;
+  border: 1.5px solid #c2fafa50;
+}
+
+@media (max-width: 500px) {
+  .leaderboardOverlayBox { padding: 14px 3vw 10px 3vw; min-width:unset; max-width:99vw;}
+  .leaderboardOverlayBox h2 { font-size: 1.13em; }
+  .leaderboardOverlayBox li { font-size: 1em; padding: 5px 2vw; }
+  .lb-mode-label { font-size:1em; }
+}
     .overlayButton {
       margin-top: 0px;
       padding: 9px 28px;
