@@ -3,19 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>Minesweeper Deluxe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Gioca a Minesweeper Deluxe: il leggendario Campo Minato con grafica moderna, classifica separata per ogni livello di difficoltà, timer, punteggi e UX ottimizzata per desktop e mobile. Sfida la tua mente e scala la classifica!">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 54 54'><circle cx='27' cy='27' r='24' fill='%2335a7ff' stroke='%2314375c' stroke-width='3'/><circle cx='27' cy='27' r='16' fill='%23fff'/><circle cx='27' cy='27' r='12' fill='%23e3414b'/><rect x='25' y='12' width='4' height='12' rx='2' fill='%23193972'/><rect x='25' y='30' width='4' height='12' rx='2' fill='%23193972'/><rect x='12' y='25' width='12' height='4' rx='2' fill='%23193972'/><rect x='30' y='25' width='12' height='4' rx='2' fill='%23193972'/><circle cx='27' cy='27' r='3' fill='%23fff' opacity='0.5'/></svg>">
   <style>
     body {
       background: linear-gradient(120deg, #f6f7fb 30%, #c5d8e8 100%);
       font-family: 'Montserrat', Arial, sans-serif;
-      min-height: 100vh; margin: 0; display: flex; flex-direction: column; align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .header-container { display: flex; flex-direction: column; align-items: center; margin-top: 36px; margin-bottom: 12px; }
     .logo-title { display: flex; align-items: center; gap: 22px; margin-bottom: 10px;}
     .logo-svg { flex-shrink: 0; filter: drop-shadow(0 3px 12px #b9d8ef80);}
-    .main-title { font-size: 2.65em; font-family: 'Montserrat', Arial, sans-serif; color: #14375c; font-weight: 800; letter-spacing: 2.5px; text-shadow: 0 2px 18px #b9d8ef70;}
-    .subtitle { font-size: 1.22em; color: #e3414b; font-family: 'Montserrat', Arial, sans-serif; font-weight: 500; letter-spacing: 2px; text-align: center; margin-top: -4px; margin-bottom: 4px; text-shadow: 0 1px 8px #ffb9bf66;}
+    .main-title { font-size: 2.65em; color: #14375c; font-weight: 800; letter-spacing: 2.5px; text-shadow: 0 2px 18px #b9d8ef70;}
+    .subtitle { font-size: 1.22em; color: #e3414b; font-weight: 500; letter-spacing: 2px; text-align: center; margin-top: -4px; margin-bottom: 4px; text-shadow: 0 1px 8px #ffb9bf66;}
     #mode-select { display:flex; gap:13px; align-items:center; justify-content: center; margin-top:5px; margin-bottom:7px;}
     .mode-label { font-weight: 600; color: #14375c; font-size: 1.1em;}
     .mode-select {
@@ -29,7 +34,7 @@
     #game-stats {
       display: flex; align-items: center; justify-content: center; gap: 22px;
       background: #f3fdff; border-radius: 16px; box-shadow: 1px 2px 12px #88c0d040;
-      padding: 9px 28px; font-family: 'Montserrat', Arial, sans-serif; font-size: 1.19em;
+      padding: 9px 28px; font-size: 1.19em;
       margin-bottom: 10px; margin-top: 4px;
     }
     .stat-label { color: #35a7ff; font-weight: 600; letter-spacing: 1px; margin-right: 7px;}
@@ -49,16 +54,40 @@
     button:focus { outline:2px solid #35a7ff; outline-offset:2px;}
     button:active { transform:scale(0.97); box-shadow:0 2px 6px #51a1fa88;}
     #gameBoard {
-      display: grid; grid-template-columns: repeat(9, 38px); gap: 4px;
-      padding: 18px; background: #eaf6fb; border-radius: 18px; box-shadow: 2px 8px 32px #a0c5e680;
-      margin-bottom: 40px; justify-content: center; width: max-content; position:relative;
+      display: grid;
+      gap: 0;
+      margin: 0 auto;
+      justify-content: center;
+      width: 98vw;
+      max-width: 450px;
+      overflow-x: auto;
+      padding: 18px;
+      background: #eaf6fb;
+      border-radius: 18px;
+      box-shadow: 2px 8px 32px #a0c5e680;
+      margin-bottom: 40px;
+      position:relative;
     }
     .cell {
-      width: 38px; height: 38px; background: linear-gradient(120deg, #d0eafc 80%, #bee7ff 100%);
-      border-radius: 8px; box-shadow: 0 1px 2px #8bb9d2a0; text-align: center; font-size: 1.21em;
-      cursor: pointer; border: 1px solid #b8daff;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.14s, box-shadow 0.14s; user-select: none; outline:none;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 1px 2px #8bb9d2a0;
+      text-align: center;
+      font-size: 1.21em;
+      cursor: pointer;
+      background: linear-gradient(120deg, #d0eafc 80%, #bee7ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      touch-action: manipulation;
+      transition: background 0.14s, box-shadow 0.14s;
+      outline:none;
     }
     .cell:active { filter:brightness(0.96); box-shadow:0 2px 7px #51a1fa32;}
     .cell:focus { outline:2px solid #35a7ff; outline-offset:2px;}
@@ -74,32 +103,69 @@
     .cell.revealed[data-adjacent="7"] { color: #2c2d2f; }
     .cell.revealed[data-adjacent="8"] { color: #7c7e80; }
     @media (max-width: 600px) {
-  #gameBoard {
-    grid-template-columns: repeat(9, 54px);   /* Celle GIGANTI! */
-    padding: 2vw 0vw;
-    max-width:99vw;
-  }
-  .cell {
-    width: 54px;
-    height: 54px;
-    font-size: 1.60em;
-    touch-action: manipulation;
-  }
+      #gameBoard {
+        width: 98vw;
+        max-width: 450px;
+        gap: 0;
+        column-gap: 0;
+        row-gap: 0;
+        padding: 6px;
+        margin: 0 auto 24px auto;
+      }
+      .cell {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        margin: 0;
+        padding: 0;
+        font-size: 1.32em;
+        box-sizing: border-box;
+        border: none;
+      }
       .main-title { font-size: 1.3em; }
       .subtitle { font-size: 1em; }
       .logo-title { gap: 12px; }
       .header-container { margin-top: 14px;}
       #game-stats { font-size: 1em; padding: 6px 4vw;}
     }
-
-    #overlay {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(48, 97, 150, 0.08);
-      z-index: 10; display: flex; align-items: center; justify-content: center;
-      font-family: 'Montserrat', Arial, sans-serif;
+    #banner {
+      position: absolute;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #35a7ff;
+      color: #fff;
+      font-size: 1.22em;
+      font-weight: bold;
+      padding: 8px 24px;
+      border-radius: 12px;
+      opacity: 0.88;
+      z-index: 15;
+      box-shadow: 0 4px 24px #194c7a77;
+      display: none;
+      pointer-events: none;
+      text-shadow: 0 1px 2px #14375c31;
     }
-    #overlayContent {
-      background: #fff; border-radius: 26px;
+    #overlay,
+    #localLeaderboardOverlay,
+    #rulesOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(48,97,150,0.11);
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    #overlay {
+      background: rgba(48, 97, 150, 0.08);
+      z-index: 10;
+    }
+    #overlayContent,
+    .leaderboardOverlayBox,
+    .rulesContent {
+      background: #fff;
+      border-radius: 26px;
       box-shadow: 0 12px 44px #1b2b4ad9;
       padding: 38px 52px; min-width: 320px; max-width: 96vw;
       text-align: center; font-size: 1.38em; color: #14375c;
@@ -118,9 +184,13 @@
     .stats-value { background: linear-gradient(90deg, #eaf6fb 60%, #b6e3fc 100%); color: #193972; border-radius: 9px; font-weight: 700; font-size: 1.19em; padding: 2px 16px; letter-spacing: 2px; margin: 0 2px 0 0; box-shadow: 0 2px 8px #bee7ff0a; border: 1.5px solid #bee7ff70;}
     .overlayButtonsRow { display: flex; gap: 28px; justify-content: center; margin-top: 18px;}
     @media (max-width: 500px) {
-      #overlayContent { padding: 18px 6vw; min-width: unset;}
+      #overlayContent, .leaderboardOverlayBox, .rulesContent { padding: 18px 6vw; min-width: unset;}
       .stats-row { gap: 11px; }
       .overlayButtonsRow { flex-direction: column; gap: 14px; margin-top: 13px;}
+      .leaderboardOverlayBox { padding: 17px 3vw 14px 3vw; min-width:unset; max-width:99vw;}
+      .leaderboardOverlayBox h2 { font-size: 1.16em; }
+      .leaderboardOverlayBox li { font-size: 1em; padding: 5px 2vw; }
+      .lb-mode-label { font-size:1em; }
     }
     .overlayButton {
       margin-top: 0px;
@@ -135,92 +205,6 @@
     }
     .overlayButton:hover { background:linear-gradient(90deg,#35a7ff 40%,#95d8ff 100%); transform:translateY(-2px) scale(1.07);}
     .overlayButton:focus { outline:2px solid #193972; outline-offset:2px;}
-    #banner { position:absolute; top:70px; left:50%; transform:translateX(-50%); background:#35a7ff; color:#fff; font-size:1.22em; font-weight:bold; padding:8px 24px; border-radius:12px; opacity:0.88; z-index:15; box-shadow:0 4px 24px #194c7a77; display:none; pointer-events:none; text-shadow:0 1px 2px #14375c31;}
-    #localLeaderboardOverlay {
-      position: fixed; top: 0; left:0; width:100vw; height:100vh;
-      background: rgba(48,97,150,0.11);
-      z-index: 20;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-    .leaderboardOverlayBox {
-      background: #fff;
-      border-radius: 28px;
-      box-shadow: 0 12px 44px #1b2b4ac0;
-      padding: 38px 36px 22px 36px;
-      min-width: 320px;
-      max-width: 94vw;
-      text-align: center;
-      font-size: 1.16em;
-      color: #14375c;
-      animation: bounceIn 0.38s cubic-bezier(.34,1.56,.64,1);
-    }
-    .leaderboardOverlayBox h2 {
-      font-size: 1.48em;
-      color: #35a7ff;
-      font-weight: bold;
-      margin-bottom: 17px;
-      margin-top: 0;
-      letter-spacing: 2px;
-    }
-    .leaderboardOverlayBox ul {
-      margin: 0 0 22px 0;
-      padding: 0;
-      list-style: none;
-    }
-    .leaderboardOverlayBox li {
-      background: linear-gradient(90deg,#f3fdff 70%,#d0eafc 100%);
-      color: #284b63;
-      padding: 8px 14px;
-      margin-bottom: 10px;
-      border-radius: 13px;
-      box-shadow: 0 2px 10px #b9d8ef26;
-      font-size: 1.08em;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 500;
-      justify-content: center;
-    }
-    .leaderboardOverlayBox li:first-child {
-      background: linear-gradient(90deg,#cdeffa 60%,#77bff2 100%);
-      color: #1b599d;
-      font-size: 1.15em;
-      font-weight: 700;
-      border: 1.5px solid #35a7ff20;
-      box-shadow: 0 4px 12px #51a1fa40;
-    }
-    .leaderboardOverlayBox li:last-child { margin-bottom: 0; }
-    .lb-mode-label {
-      font-size: 1.06em;
-      color: #144c7a;
-      font-weight: 600;
-      margin-bottom: 13px;
-      letter-spacing:1px;
-      background: #eaf6fb;
-      border-radius: 14px;
-      padding: 4px 14px;
-      display: inline-block;
-      text-shadow: 0 1px 8px #cff2ff66;
-      box-shadow: 0 2px 4px #bee7ff11;
-    }
-    @media (max-width: 500px) {
-      .leaderboardOverlayBox { padding: 17px 3vw 14px 3vw; min-width:unset; max-width:99vw;}
-      .leaderboardOverlayBox h2 { font-size: 1.16em; }
-      .leaderboardOverlayBox li { font-size: 1em; padding: 5px 2vw; }
-      .lb-mode-label { font-size:1em; }
-    }
-    #rulesOverlay {
-      position: fixed; top:0; left:0; width:100vw; height:100vh;
-      background: rgba(48,97,150,0.16);
-      z-index:18; display: none; align-items: center; justify-content: center;
-    }
-    .rulesContent {
-      background: #fff; border-radius: 22px; box-shadow:0 8px 30px #14375c90;
-      padding: 34px 26px; max-width: 420px; min-width:260px; text-align:center;
-      font-family: Montserrat, Arial, sans-serif;
-    }
   </style>
 </head>
 <body>
@@ -266,9 +250,22 @@
     </div>
   </div>
   <div id="banner"></div>
-  <div id="localLeaderboardOverlay" style="display:none;"></div>
-  <div id="rulesOverlay" style="display:none;"></div>
-  <div id="overlay" style="display:none;"></div>
+
+  <!-- Overlay di game over (mostra dinamicamente contenuto con JS) -->
+  <div id="overlay" style="display:none;">
+    <div id="overlayContent"></div>
+  </div>
+
+  <!-- Overlay classifica/leaderboard -->
+  <div id="localLeaderboardOverlay" style="display:none;">
+    <div class="leaderboardOverlayBox"></div>
+  </div>
+
+  <!-- Overlay regole -->
+  <div id="rulesOverlay" style="display:none;">
+    <div class="rulesContent"></div>
+  </div>
+
   <div id="gameBoard"></div>
   <script src="minesweeper.js"></script>
 </body>

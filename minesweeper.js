@@ -203,42 +203,43 @@ function revealCell(r, c) {
 
 function renderBoard() {
   gameBoard.innerHTML = '';
-  gameBoard.style.gridTemplateColumns = `repeat(${cols}, 38px)`;
+
+  let cellSize;
+  if (boardMode === 'expert') {
+    cellSize = 32;
+    gameBoard.style.width = (cellSize * cols) + 'px';
+    gameBoard.style.maxWidth = '100vw';
+  } else {
+    const boardWidth = Math.min(window.innerWidth * 0.98, 450);
+    cellSize = boardWidth / cols;
+    gameBoard.style.width = '';
+    gameBoard.style.maxWidth = '';
+  }
+  gameBoard.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
+
+  /* CREA celle DOM e collega al modello dati */
+
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      const div = document.createElement('div');
-      div.className = 'cell';
-      div.tabIndex = 0;
-      div.onclick = () => { if (gameActive) revealCell(r, c); };
-	  div.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-      // Middle click, FORZA bandierina e blocca autoscroll
-      div.addEventListener('mousedown', function(e) {
-        if (gameActive && e.button === 1) {
-          e.preventDefault();
-          toggleFlag(r, c);
-        }
-      });
-      // Touch prolungato SU SMARTPHONE: bandierina
-      let touchTimer = null;
-      div.ontouchstart = function(e) {
-        touchTimer = setTimeout(function() {
-          if (gameActive) toggleFlag(r, c);
-        }, 600);
-      };
-      div.ontouchend = function(e) {
-        if (touchTimer) clearTimeout(touchTimer);
-      };
-      div.onkeydown = (e) => {
-        if (!gameActive) return;
-        if (e.key === "Enter" || e.key === " ") revealCell(r, c);
-        else if (e.key.toLowerCase() === "f") toggleFlag(r, c);
-      };
-      board[r][c].element = div;
+      const cellDiv = document.createElement('div');
+      cellDiv.className = 'cell';
+      // Collega alla cella logica:
+      board[r][c].element = cellDiv;
+      // Aggiorna aspetto
       updateCellView(r, c);
-      gameBoard.appendChild(div);
+      // Collega gli eventi click
+      cellDiv.addEventListener('click', function(e) {
+        if (e.button === 0) revealCell(r, c);
+      });
+      cellDiv.addEventListener('contextmenu', function(e){
+        e.preventDefault();
+        toggleFlag(r, c);
+      });
+      gameBoard.appendChild(cellDiv);
     }
   }
 }
+
 
 function restartGame() {
   gameActive = true;
@@ -407,6 +408,8 @@ document.addEventListener('keydown', function(e){
     closeLocalLeaderboardOverlay();
   }
 });
+
+window.addEventListener('resize', renderBoard);
 
 // Inizializza il gioco
 createBoard();
