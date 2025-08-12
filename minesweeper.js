@@ -23,6 +23,13 @@ let timer = 0;
 let timerInterval = null;
 let firstMove = true;
 
+// Sostituisci con i tuoi valori!
+const SUPABASE_URL = 'https://sipmkhgstjtgjhlhznsj.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpcG1raGdzdGp0Z2pobGh6bnNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDQ3ODQsImV4cCI6MjA3MDU4MDc4NH0.mELQeLF_sJu7G-5BKHYueQRQ2sXBUUeVK2gpg6SRh7M';
+
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+
 // Leaderboard separata per ogni modalità
 function getLeaderboardKey() {
   return "minesweeperLeaderboard_" + boardMode;
@@ -284,7 +291,7 @@ function showOverlayGameOver() {
     </div>
     <div class="overlayButtonsRow">
       <button class="overlayButton" onclick="submitScore()">Salva e nuova partita</button>
-      <button class="overlayButton" onclick="openLeaderboard()">Leaderboard</button>
+      <button class="overlayButton" onclick="showLocalLeaderboardOverlay()">Classifica</button>
     </div>
   </div>`;
   overlay.style.display = "flex";
@@ -321,11 +328,12 @@ function hideOverlay() {
   overlay.innerHTML = "";
 }
 
-function submitScore() {
+async function submitScore() {
   const input = document.getElementById('playerName');
   let name = input ? input.value.trim() : '';
   if (!name) name = 'Anonimo';
   addScoreToLeaderboard(score, name, timer);
+  await saveGlobalLeaderboardScore(name, score, timer, boardMode);
   restartGame();
   hideOverlay();
 }
@@ -369,6 +377,78 @@ function showRules() {
 }
 function hideRules() {
   document.getElementById('rulesOverlay').style.display = "none";
+}
+
+function showLocalLeaderboardOverlay() {
+  const overlay = document.getElementById('localLeaderboardOverlay');
+  const leaderboard = getLeaderboard();
+  let list = "";
+  if (!leaderboard.length) {
+    list = '<li>Nessun punteggio registrato.</li>';
+  } else {
+    leaderboard.forEach((entry, i) => {
+      let prefix = '';
+      if (i === 0) prefix = '🥇 ';
+      else if (i === 1) prefix = '🥈 ';
+      else if (i === 2) prefix = '🥉 ';
+      const tempo = entry.duration !== undefined ? `${entry.duration}s` : '-';
+      list += `<li>${prefix}${entry.name ?? "Anonimo"} – ${tempo} – ${entry.score} · ${entry.time}</li>`;
+    });
+  }
+
+  // Mostra la label modalità sopra la lista!
+  overlay.innerHTML = `
+    <div class="leaderboardOverlayBox">
+      <h2>Classifica Locale</h2>
+      <div class="lb-mode-label">${BOARD_MODES[boardMode].label}</div>
+      <ul>${list}</ul>
+      <button class="overlayButton" onclick="closeLocalLeaderboardOverlay()">Chiudi</button>
+    </div>
+  `;
+  overlay.style.display = "flex";
+}
+
+function closeLocalLeaderboardOverlay() {
+  document.getElementById('localLeaderboardOverlay').style.display = "none";
+}
+
+async function saveGlobalLeaderboardScore(name, score, duration, mode) {
+  const { data, error } = await supabase
+    .from('leaderboard')
+    .insert([{ name, score, duration, mode }]);
+  if (error) {
+    alert('Errore salvataggio globale: ' + error.message);
+  }
+}
+
+async function showGlobalLeaderboardOverlay() {
+  const overlay = document.getElementById('localLeaderboardOverlay');
+  overlay.innerHTML = `
+    <div class="leaderboardOverlayBox">
+      <h2>Classifica Globale</h2>
+      <div class="lb-mode-label">${BOARD_MODES[boardMode].label}</div>
+      <ul id="globalLbList"><li>Caricamento…</li></ul>
+      <button class="overlayButton" onclick="closeLocalLeaderboardOverlay()">Chiudi</button>
+    </div>
+  `;
+  overlay.style.display = "flex";
+  const { data, error } = await supabase
+    .from('leaderboard')
+    .select('*')
+    .eq('mode', boardMode)
+    .order('score', { ascending: false })
+    .order('duration', { ascending: true })
+    .limit(10);
+  let out = "";
+  if (!error && data.length) {
+    data.forEach((entry, i) => {
+      let prefix = (i == 0 ? "🥇 " : i == 1 ? "🥈 " : i == 2 ? "🥉 " : "");
+      out += `<li>${prefix}${entry.name ?? "Anonimo"} – ${entry.duration}s – ${entry.score} · ${entry.time?.slice(0, 10) ?? ""}</li>`;
+    });
+  } else {
+    out = "<li>Nessun record ancora.</li>";
+  }
+  document.getElementById('globalLbList').innerHTML = out;
 }
 
 

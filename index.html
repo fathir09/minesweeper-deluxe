@@ -148,6 +148,83 @@
   font-family: Montserrat, Arial, sans-serif;
 }
 
+#localLeaderboardOverlay {
+  position: fixed; top: 0; left:0; width:100vw; height:100vh;
+  background: rgba(48,97,150,0.11);
+  z-index: 20;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaderboardOverlayBox {
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: 0 12px 44px #1b2b4ac0;
+  padding: 38px 36px 22px 36px;
+  min-width: 320px;
+  max-width: 94vw;
+  text-align: center;
+  font-size: 1.16em;
+  color: #14375c;
+  animation: bounceIn 0.38s cubic-bezier(.34,1.56,.64,1);
+}
+.leaderboardOverlayBox h2 {
+  font-size: 1.48em;
+  color: #35a7ff;
+  font-weight: bold;
+  margin-bottom: 17px;
+  margin-top: 0;
+  letter-spacing: 2px;
+}
+.leaderboardOverlayBox ul {
+  margin: 0 0 22px 0;
+  padding: 0;
+  list-style: none;
+}
+.leaderboardOverlayBox li {
+  background: linear-gradient(90deg,#f3fdff 70%,#d0eafc 100%);
+  color: #284b63;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+  border-radius: 13px;
+  box-shadow: 0 2px 10px #b9d8ef26;
+  font-size: 1.08em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+  justify-content: center;
+}
+.leaderboardOverlayBox li:first-child {
+  background: linear-gradient(90deg,#cdeffa 60%,#77bff2 100%);
+  color: #1b599d;
+  font-size: 1.15em;
+  font-weight: 700;
+  border: 1.5px solid #35a7ff20;
+  box-shadow: 0 4px 12px #51a1fa40;
+}
+.leaderboardOverlayBox li:last-child { margin-bottom: 0; }
+@media (max-width: 500px) {
+  .leaderboardOverlayBox { padding: 17px 3vw 14px 3vw; min-width:unset; max-width:99vw;}
+  .leaderboardOverlayBox h2 { font-size: 1.16em; }
+  .leaderboardOverlayBox li { font-size: 1em; padding: 5px 2vw; }
+}
+
+.lb-mode-label {
+  font-size: 1.06em;
+  color: #144c7a;
+  font-weight: 600;
+  margin-bottom: 13px;
+  letter-spacing:1px;
+  background: #eaf6fb;
+  border-radius: 14px;
+  padding: 4px 14px;
+  display: inline-block;
+  text-shadow: 0 1px 8px #cff2ff66;
+  box-shadow: 0 2px 4px #bee7ff11;
+}
+
   
   </style>
 </head>
@@ -189,14 +266,17 @@
     </div>
     <div class="controls-buttons">
       <button onclick="restartGame()" title="Inizia una nuova partita">Nuova partita</button>
-      <button onclick="openLeaderboard()" title="Vedi la classifica dei top player">Leaderboard</button>
+	  <button onclick="showLocalLeaderboardOverlay()">Classifica</button>
+	  <button class="overlayButton" onclick="showGlobalLeaderboardOverlay()">Classifica Globale</button>
     </div>
 <button onclick="showRules()" title="Come si gioca?">Regole</button>	
 <div id="rulesOverlay" style="display:none;"></div>
+<div id="localLeaderboardOverlay" style="display:none;"></div>
   </div>
   <div id="banner"></div>
   <div id="overlay" style="display:none;"></div>
   <div id="gameBoard"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script src="minesweeper.js"></script>
 </body>
 </html>
