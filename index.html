@@ -73,9 +73,18 @@
     .cell.revealed[data-adjacent="6"] { color: #19938a; }
     .cell.revealed[data-adjacent="7"] { color: #2c2d2f; }
     .cell.revealed[data-adjacent="8"] { color: #7c7e80; }
-    @media (max-width: 500px) {
-      #gameBoard { grid-template-columns: repeat(9, 39px); padding: 4vw 1vw; max-width:99vw;}
-      .cell { width: 39px; height: 39px; font-size: 1.27em; touch-action: manipulation; }
+    @media (max-width: 600px) {
+  #gameBoard {
+    grid-template-columns: repeat(9, 54px);   /* Celle GIGANTI! */
+    padding: 2vw 0vw;
+    max-width:99vw;
+  }
+  .cell {
+    width: 54px;
+    height: 54px;
+    font-size: 1.60em;
+    touch-action: manipulation;
+  }
       .main-title { font-size: 1.3em; }
       .subtitle { font-size: 1em; }
       .logo-title { gap: 12px; }
