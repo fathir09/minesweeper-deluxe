@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Leaderboard Minesweeper Deluxe</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 54 54'><circle cx='27' cy='27' r='24' fill='%2335a7ff' stroke='%2314375c' stroke-width='3'/><circle cx='27' cy='27' r='16' fill='%23fff'/><circle cx='27' cy='27' r='12' fill='%23e3414b'/><rect x='25' y='12' width='4' height='12' rx='2' fill='%23193972'/><rect x='25' y='30' width='4' height='12' rx='2' fill='%23193972'/><rect x='12' y='25' width='12' height='4' rx='2' fill='%23193972'/><rect x='30' y='25' width='12' height='4' rx='2' fill='%23193972'/><circle cx='27' cy='27' r='3' fill='%23fff' opacity='0.5'/></svg>">
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(120deg, #f6f7fb, #c5d8e8 100%);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header-container {
+      display: flex; flex-direction: column; align-items: center; margin-top: 30px; margin-bottom: 8px;
+    }
+    .logo-title { display: flex; align-items: center; gap: 22px; margin-bottom: 10px;}
+    .logo-svg { flex-shrink: 0; filter: drop-shadow(0 3px 12px #b9d8ef80);}
+    .main-title { font-size: 2.2em; font-family: 'Montserrat', Arial, sans-serif; color: #14375c; font-weight: 800; letter-spacing: 2.5px; text-shadow: 0 2px 18px #b9d8ef70;}
+    .subtitle { font-size: 1.09em; color:#35a7ff; font-weight: 600; margin-bottom:3px; text-shadow: 0 1px 10px #eaf6fb; letter-spacing:1.2px;}
+    #mode-select { display:flex; gap:13px; align-items:center; justify-content:center; margin-top:8px; margin-bottom:6px;}
+    .mode-label { font-weight: 600; color: #14375c; font-size: 1.1em; }
+    .mode-select {
+      padding: 6px 22px; font-size: 1.05em;
+      background: linear-gradient(90deg, #eef6fa 70%, #b6e3fc 100%);
+      color: #14507b; border: 1.5px solid #b9d8ef; border-radius: 12px; box-shadow: 0 2px 6px #b9d8ef1a;
+      font-family: Montserrat, Arial, sans-serif; font-weight: 600; outline:none; transition: background 0.15s;
+    }
+    .mode-select:focus { outline: 2px solid #35a7ff;}
+    .mode-select:hover { background: linear-gradient(90deg, #cdeffa 70%, #77bff2 100%);}
+    #mode-leaderboard-label {
+      font-size: 1.13em;
+      color: #144c7a; font-weight: 600; margin: 14px 0 9px 0; letter-spacing:1px; text-shadow: 0 1px 10px #eaf6fb;
+      background:#eaf6fb; border-radius:18px; padding:4px 17px; display:inline-block;
+    }
+    #leaderboard {
+      background: #eaf6fb;
+      padding: 22px 35px;
+      border-radius: 22px;
+      box-shadow: 2px 8px 32px #a0c5e680;
+      min-width: 340px;
+      max-width: 600px;
+      margin-bottom: 30px;
+      margin-top: 2px;
+    }
+    li {
+      font-size: 1.14em;
+      color: #284b63;
+      background: linear-gradient(90deg, #f3fdff 70%, #d0eafc 100%);
+      padding: 8px 14px;
+      margin-bottom: 10px;
+      border-radius: 13px;
+      box-shadow: 0 2px 10px #b9d8ef20;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 500;
+    }
+    li:first-child {
+      background: linear-gradient(90deg, #cdeffa 70%, #77bff2 100%);
+      color: #1b599d;
+      font-size: 1.22em;
+      font-weight: 700;
+      border: 1.5px solid #35a7ff20;
+      box-shadow: 0 4px 12px #51a1fa40;
+    }
+    li:last-child { margin-bottom: 0; }
+    @media (max-width: 500px) {
+      #leaderboard { padding: 10px 5vw; min-width:unset; max-width:96vw; }
+      .main-title { font-size: 1.12em; }
+      .logo-title { gap: 12px; }
+      .header-container { margin-top: 10px;}
+      #mode-leaderboard-label { font-size: 1em; padding: 4px 7vw;}
+      li { font-size: 1em; padding: 7px 7vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-container">
+    <div class="logo-title">
+      <svg width="54" height="54" viewBox="0 0 54 54" class="logo-svg">
+        <circle cx="27" cy="27" r="24" fill="#35a7ff" stroke="#14375c" stroke-width="3"/>
+        <circle cx="27" cy="27" r="16" fill="#fff"/>
+        <circle cx="27" cy="27" r="12" fill="#e3414b"/>
+        <rect x="25" y="12" width="4" height="12" rx="2" fill="#193972"/>
+        <rect x="25" y="30" width="4" height="12" rx="2" fill="#193972"/>
+        <rect x="12" y="25" width="12" height="4" rx="2" fill="#193972"/>
+        <rect x="30" y="25" width="12" height="4" rx="2" fill="#193972"/>
+        <circle cx="27" cy="27" r="3" fill="#fff" opacity="0.5"/>
+      </svg>
+      <span class="main-title">Minesweeper Deluxe</span>
+    </div>
+    <div class="subtitle">
+      <span>🏆 La Classifica Top Players</span>
+    </div>
+    <div id="mode-select">
+      <label for="modeLb" class="mode-label">Modalità:</label>
+      <select id="modeLb" class="mode-select">
+        <option value="beginner">Principiante (9x9)</option>
+        <option value="intermediate">Intermedio (16x16)</option>
+        <option value="expert">Esperto (16x30)</option>
+      </select>
+    </div>
+  </div>
+  
+  <ul id="leaderboard"></ul>
+
+  <script>
+    const MODI = {
+      beginner: "Principiante (9x9)",
+      intermediate: "Intermedio (16x16)",
+      expert: "Esperto (16x30)"
+    };
+    function getLeaderboardKey(mode) {
+      return "minesweeperLeaderboard_" + mode;
+    }
+    function getLeaderboard(mode) {
+      const data = localStorage.getItem(getLeaderboardKey(mode));
+      return data ? JSON.parse(data) : [];
+    }
+    function renderLeaderboard(mode) {
+      const leaderboard = getLeaderboard(mode);
+      const list = document.getElementById('leaderboard');
+      list.innerHTML = '';
+      if (leaderboard.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'Nessun punteggio registrato.';
+        list.appendChild(li);
+      } else {
+        leaderboard.forEach((entry, i) => {
+          const li = document.createElement('li');
+          let prefix = '';
+          if (i === 0) prefix = '🥇 ';
+          else if (i === 1) prefix = '🥈 ';
+          else if (i === 2) prefix = '🥉 ';
+          const tempo = entry.duration !== undefined ? `${entry.duration}s` : '-';
+          li.textContent = `${prefix}${entry.name ?? "Anonimo"} – ${tempo} – ${entry.score} · ${entry.time}`;
+          list.appendChild(li);
+        });
+      }
+    }
+    let modalita = 'beginner';
+    const modeLb = document.getElementById('modeLb');
+    modeLb.value = modalita;
+    modeLb.addEventListener('change', function () {
+      modalita = this.value;
+      renderLeaderboard(modalita);
+    });
+    renderLeaderboard(modalita);
+  </script>
+</body>
+</html>
