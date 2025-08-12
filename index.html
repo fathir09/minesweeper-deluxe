@@ -136,6 +136,19 @@
     .overlayButton:hover { background:linear-gradient(90deg,#35a7ff 40%,#95d8ff 100%); transform:translateY(-2px) scale(1.07);}
     .overlayButton:focus { outline:2px solid #193972; outline-offset:2px;}
     #banner { position:absolute; top:70px; left:50%; transform:translateX(-50%); background:#35a7ff; color:#fff; font-size:1.22em; font-weight:bold; padding:8px 24px; border-radius:12px; opacity:0.88; z-index:15; box-shadow:0 4px 24px #194c7a77; display:none; pointer-events:none; text-shadow:0 1px 2px #14375c31;}
+  
+  #rulesOverlay {
+  position: fixed; top:0; left:0; width:100vw; height:100vh;
+  background: rgba(48,97,150,0.16);
+  z-index:18; display: none; align-items: center; justify-content: center;
+}
+.rulesContent {
+  background: #fff; border-radius: 22px; box-shadow:0 8px 30px #14375c90;
+  padding: 34px 26px; max-width: 420px; min-width:260px; text-align:center;
+  font-family: Montserrat, Arial, sans-serif;
+}
+
+  
   </style>
 </head>
 <body>
@@ -178,6 +191,8 @@
       <button onclick="restartGame()" title="Inizia una nuova partita">Nuova partita</button>
       <button onclick="openLeaderboard()" title="Vedi la classifica dei top player">Leaderboard</button>
     </div>
+<button onclick="showRules()" title="Come si gioca?">Regole</button>	
+<div id="rulesOverlay" style="display:none;"></div>
   </div>
   <div id="banner"></div>
   <div id="overlay" style="display:none;"></div>

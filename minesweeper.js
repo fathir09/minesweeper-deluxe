@@ -347,6 +347,31 @@ function startTimer() {
   }, 1000);
 }
 
+function showRules() {
+  const rulesOverlay = document.getElementById('rulesOverlay');
+  rulesOverlay.innerHTML = `
+    <div class="rulesContent">
+      <h2 style="color:#35a7ff;">Come si gioca a Minesweeper?</h2>
+      <ul style="text-align:left;font-size:1.07em;line-height:1.5;color:#193972;padding-left:20px;">
+        <li>Scopo: <b>Scoprire tutte le celle senza mine</b>, piazzando bandierine dove pensi ci siano mine.</li>
+        <li><b>Click singolo</b> su una cella per scoprirla.<br>
+        <b>Long press</b> (tocco prolungato su smartphone) o <b>tasto centrale del mouse</b> per mettere/rimuovere una bandierina.</li>
+        <li>Se scopri una mina: <b>Game Over!</b></li>
+        <li>Ogni cella mostra un numero: indica quante mine ci sono nelle celle adiacenti.</li>
+        <li>Vinci se scopri tutte le celle libere (<b>senza mine</b>).</li>
+      </ul>
+      <div style="margin:18px 0 5px 0;">
+        <button onclick="hideRules()" class="overlayButton">OK, ho capito!</button>
+      </div>
+    </div>
+  `;
+  rulesOverlay.style.display = "flex";
+}
+function hideRules() {
+  document.getElementById('rulesOverlay').style.display = "none";
+}
+
+
 function stopTimer() { clearInterval(timerInterval); }
 function resetTimer() { timer = 0; timerSpan.textContent = timer; clearInterval(timerInterval); }
 
